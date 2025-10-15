@@ -1,0 +1,1 @@
+ALTER TABLE "transacciones" ALTER COLUMN "cuenta_origen_id" DROP NOT NULL;

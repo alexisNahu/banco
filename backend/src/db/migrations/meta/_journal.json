@@ -1,0 +1,48 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1758727592144,
+      "tag": "0000_purple_tarot",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1759417471045,
+      "tag": "0001_perpetual_diamondback",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1759593853118,
+      "tag": "0002_glossy_colossus",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1760019880977,
+      "tag": "0003_chunky_albert_cleary",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1760020968929,
+      "tag": "0004_mature_stone_men",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1760021659656,
+      "tag": "0005_wakeful_vin_gonzales",
+      "breakpoints": true
+    }
+  ]
+}

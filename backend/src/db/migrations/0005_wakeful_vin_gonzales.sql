@@ -1,0 +1,1 @@
+ALTER TABLE "prestamos" RENAME COLUMN "aprobado" TO "permitir_modifcacion";

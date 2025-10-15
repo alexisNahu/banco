@@ -1,0 +1,1 @@
+ALTER TABLE "prestamos" ALTER COLUMN "fecha_vencimiento" DROP NOT NULL;

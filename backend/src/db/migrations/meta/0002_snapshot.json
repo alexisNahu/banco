@@ -1,0 +1,1314 @@
+{
+  "id": "3f1a94b3-67d5-4d64-9e7f-697c0e94b562",
+  "prevId": "8d8b29c5-a65b-46bb-b78c-65bacedafa76",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.auditoria": {
+      "name": "auditoria",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "usuario_id": {
+          "name": "usuario_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "accion_realizada": {
+          "name": "accion_realizada",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tabla_afectada": {
+          "name": "tabla_afectada",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "registro_afectado_id": {
+          "name": "registro_afectado_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "valores_anteriores": {
+          "name": "valores_anteriores",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "valores_nuevos": {
+          "name": "valores_nuevos",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fecha_hora": {
+          "name": "fecha_hora",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "ip_origen": {
+          "name": "ip_origen",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "dispositivo": {
+          "name": "dispositivo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nivel_criticidad": {
+          "name": "nivel_criticidad",
+          "type": "nivel_criticidad",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'bajo'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "auditoria_usuario_id_usuarios_sistema_id_fk": {
+          "name": "auditoria_usuario_id_usuarios_sistema_id_fk",
+          "tableFrom": "auditoria",
+          "tableTo": "usuarios_sistema",
+          "columnsFrom": [
+            "usuario_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.bitacora_sistema": {
+      "name": "bitacora_sistema",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "fecha_hora": {
+          "name": "fecha_hora",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "nivel": {
+          "name": "nivel",
+          "type": "log_nivel",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "modulo": {
+          "name": "modulo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "mensaje": {
+          "name": "mensaje",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "usuario_id": {
+          "name": "usuario_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ip_origen": {
+          "name": "ip_origen",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stack_trace": {
+          "name": "stack_trace",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "bitacora_sistema_usuario_id_usuarios_sistema_id_fk": {
+          "name": "bitacora_sistema_usuario_id_usuarios_sistema_id_fk",
+          "tableFrom": "bitacora_sistema",
+          "tableTo": "usuarios_sistema",
+          "columnsFrom": [
+            "usuario_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.cajeros_automaticos": {
+      "name": "cajeros_automaticos",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "codigo_cajero": {
+          "name": "codigo_cajero",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ubicacion": {
+          "name": "ubicacion",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "saldo_efectivo_disponible": {
+          "name": "saldo_efectivo_disponible",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "denominaciones_disponibles": {
+          "name": "denominaciones_disponibles",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "estado": {
+          "name": "estado",
+          "type": "estado_cajero",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fecha_ultimo_abastecimiento": {
+          "name": "fecha_ultimo_abastecimiento",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fecha_ultimo_mantenimiento": {
+          "name": "fecha_ultimo_mantenimiento",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.clientes": {
+      "name": "clientes",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "tipo_identificacion": {
+          "name": "tipo_identificacion",
+          "type": "tipo_identificacion",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "numero_identificacion": {
+          "name": "numero_identificacion",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nombres": {
+          "name": "nombres",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "apellidos": {
+          "name": "apellidos",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fecha_nacimiento": {
+          "name": "fecha_nacimiento",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nacionalidad": {
+          "name": "nacionalidad",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'paraguaya'"
+        },
+        "direccion": {
+          "name": "direccion",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "departamento": {
+          "name": "departamento",
+          "type": "departamento",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "distrito": {
+          "name": "distrito",
+          "type": "distrito",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ciudad": {
+          "name": "ciudad",
+          "type": "ciudad",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "telefono": {
+          "name": "telefono",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fecha_creacion": {
+          "name": "fecha_creacion",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "fecha_actualizacion": {
+          "name": "fecha_actualizacion",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "estado": {
+          "name": "estado",
+          "type": "estado_cliente",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'activo'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.cuentas": {
+      "name": "cuentas",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "cliente_id": {
+          "name": "cliente_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "numero_cuenta": {
+          "name": "numero_cuenta",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "nextval('numero_cuenta_seq')::text"
+        },
+        "tipo_cuenta": {
+          "name": "tipo_cuenta",
+          "type": "tipo_cuenta",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "saldo_actual": {
+          "name": "saldo_actual",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "saldo_disponible": {
+          "name": "saldo_disponible",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "moneda": {
+          "name": "moneda",
+          "type": "moneda",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fecha_apertura": {
+          "name": "fecha_apertura",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fecha_cierre": {
+          "name": "fecha_cierre",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "estado": {
+          "name": "estado",
+          "type": "estado_cuenta",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "limite_transferencia_diaria": {
+          "name": "limite_transferencia_diaria",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "cuentas_cliente_id_clientes_id_fk": {
+          "name": "cuentas_cliente_id_clientes_id_fk",
+          "tableFrom": "cuentas",
+          "tableTo": "clientes",
+          "columnsFrom": [
+            "cliente_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.permisos": {
+      "name": "permisos",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "nombre": {
+          "name": "nombre",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "descripcion": {
+          "name": "descripcion",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.prestamos": {
+      "name": "prestamos",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "cliente_id": {
+          "name": "cliente_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "cuenta_id": {
+          "name": "cuenta_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "monto_solicitado": {
+          "name": "monto_solicitado",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "monto_aprobado": {
+          "name": "monto_aprobado",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tasa_interes": {
+          "name": "tasa_interes",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "plazo_meses": {
+          "name": "plazo_meses",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "cuota_mensual": {
+          "name": "cuota_mensual",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fecha_solicitud": {
+          "name": "fecha_solicitud",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "fecha_aprobacion": {
+          "name": "fecha_aprobacion",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fecha_vencimiento": {
+          "name": "fecha_vencimiento",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "estado": {
+          "name": "estado",
+          "type": "estado_prestamo",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "motivo_rechazo": {
+          "name": "motivo_rechazo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "prestamos_cliente_id_clientes_id_fk": {
+          "name": "prestamos_cliente_id_clientes_id_fk",
+          "tableFrom": "prestamos",
+          "tableTo": "clientes",
+          "columnsFrom": [
+            "cliente_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "prestamos_cuenta_id_cuentas_id_fk": {
+          "name": "prestamos_cuenta_id_cuentas_id_fk",
+          "tableFrom": "prestamos",
+          "tableTo": "cuentas",
+          "columnsFrom": [
+            "cuenta_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.roles": {
+      "name": "roles",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "nombre": {
+          "name": "nombre",
+          "type": "rol_nombre",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "descripcion": {
+          "name": "descripcion",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.roles_permisos": {
+      "name": "roles_permisos",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "rol_id": {
+          "name": "rol_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "permiso_id": {
+          "name": "permiso_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "roles_permisos_rol_id_roles_id_fk": {
+          "name": "roles_permisos_rol_id_roles_id_fk",
+          "tableFrom": "roles_permisos",
+          "tableTo": "roles",
+          "columnsFrom": [
+            "rol_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "roles_permisos_permiso_id_permisos_id_fk": {
+          "name": "roles_permisos_permiso_id_permisos_id_fk",
+          "tableFrom": "roles_permisos",
+          "tableTo": "permisos",
+          "columnsFrom": [
+            "permiso_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.servicios": {
+      "name": "servicios",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "nombre_servicio": {
+          "name": "nombre_servicio",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "codigo_servicio": {
+          "name": "codigo_servicio",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tipo_servicio": {
+          "name": "tipo_servicio",
+          "type": "tipo_servicio",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "estado": {
+          "name": "estado",
+          "type": "estado_servicio",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.tarjetas": {
+      "name": "tarjetas",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "cuenta_id": {
+          "name": "cuenta_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "numero_tarjeta": {
+          "name": "numero_tarjeta",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tipo_tarjeta": {
+          "name": "tipo_tarjeta",
+          "type": "tipo_tarjeta",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fecha_emision": {
+          "name": "fecha_emision",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fecha_vencimiento": {
+          "name": "fecha_vencimiento",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "codigo_seguridad": {
+          "name": "codigo_seguridad",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "limite_credito": {
+          "name": "limite_credito",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "limite_diario_retiro": {
+          "name": "limite_diario_retiro",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "estado": {
+          "name": "estado",
+          "type": "estado_tarjeta",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "tarjetas_cuenta_id_cuentas_id_fk": {
+          "name": "tarjetas_cuenta_id_cuentas_id_fk",
+          "tableFrom": "tarjetas",
+          "tableTo": "cuentas",
+          "columnsFrom": [
+            "cuenta_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.transacciones": {
+      "name": "transacciones",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "tipo_transaccion": {
+          "name": "tipo_transaccion",
+          "type": "tipo_transaccion",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "cuenta_origen_id": {
+          "name": "cuenta_origen_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cuenta_destino_id": {
+          "name": "cuenta_destino_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cajero_id": {
+          "name": "cajero_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "servicio_id": {
+          "name": "servicio_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "monto": {
+          "name": "monto",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "moneda": {
+          "name": "moneda",
+          "type": "moneda",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fecha_hora_transaccion": {
+          "name": "fecha_hora_transaccion",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "descripcion": {
+          "name": "descripcion",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "estado": {
+          "name": "estado",
+          "type": "estado_transaccion",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "codigo_autorizacion": {
+          "name": "codigo_autorizacion",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "referencia_pago": {
+          "name": "referencia_pago",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "transacciones_cuenta_origen_id_cuentas_id_fk": {
+          "name": "transacciones_cuenta_origen_id_cuentas_id_fk",
+          "tableFrom": "transacciones",
+          "tableTo": "cuentas",
+          "columnsFrom": [
+            "cuenta_origen_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "transacciones_cuenta_destino_id_cuentas_id_fk": {
+          "name": "transacciones_cuenta_destino_id_cuentas_id_fk",
+          "tableFrom": "transacciones",
+          "tableTo": "cuentas",
+          "columnsFrom": [
+            "cuenta_destino_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "transacciones_cajero_id_cajeros_automaticos_id_fk": {
+          "name": "transacciones_cajero_id_cajeros_automaticos_id_fk",
+          "tableFrom": "transacciones",
+          "tableTo": "cajeros_automaticos",
+          "columnsFrom": [
+            "cajero_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "transacciones_servicio_id_servicios_id_fk": {
+          "name": "transacciones_servicio_id_servicios_id_fk",
+          "tableFrom": "transacciones",
+          "tableTo": "servicios",
+          "columnsFrom": [
+            "servicio_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.usuarios_sistema": {
+      "name": "usuarios_sistema",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "cliente_id": {
+          "name": "cliente_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "username": {
+          "name": "username",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "password_hash": {
+          "name": "password_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "rol_id": {
+          "name": "rol_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fecha_creacion": {
+          "name": "fecha_creacion",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "fecha_ultimo_acceso": {
+          "name": "fecha_ultimo_acceso",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "estado": {
+          "name": "estado",
+          "type": "estado_usuario",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "intentos_fallidos": {
+          "name": "intentos_fallidos",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": 0
+        },
+        "fecha_ultimo_cambio_password": {
+          "name": "fecha_ultimo_cambio_password",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "usuarios_sistema_cliente_id_clientes_id_fk": {
+          "name": "usuarios_sistema_cliente_id_clientes_id_fk",
+          "tableFrom": "usuarios_sistema",
+          "tableTo": "clientes",
+          "columnsFrom": [
+            "cliente_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "usuarios_sistema_rol_id_roles_id_fk": {
+          "name": "usuarios_sistema_rol_id_roles_id_fk",
+          "tableFrom": "usuarios_sistema",
+          "tableTo": "roles",
+          "columnsFrom": [
+            "rol_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {
+    "public.ciudad": {
+      "name": "ciudad",
+      "schema": "public",
+      "values": [
+        "Asuncion",
+        "CDE",
+        "Encarnacion",
+        "Concepcion"
+      ]
+    },
+    "public.nivel_criticidad": {
+      "name": "nivel_criticidad",
+      "schema": "public",
+      "values": [
+        "bajo",
+        "medio",
+        "alto",
+        "critico"
+      ]
+    },
+    "public.departamento": {
+      "name": "departamento",
+      "schema": "public",
+      "values": [
+        "Concepcion",
+        "San Pedro",
+        "Asuncion",
+        "Central",
+        "Paraguari",
+        "Itapua",
+        "Misiones",
+        "Caaguazu",
+        "Caazapa",
+        "Alto Parana",
+        "Cordillera",
+        "Guaira",
+        "Canindeyu",
+        "Neembucu",
+        "Amambay",
+        "Presidente Hayes",
+        "Boqueron",
+        "Ñeembucu"
+      ]
+    },
+    "public.distrito": {
+      "name": "distrito",
+      "schema": "public",
+      "values": [
+        "Asuncion(Capital)",
+        "Concepcion",
+        "San Pedro",
+        "Ciudad del Este"
+      ]
+    },
+    "public.estado_cajero": {
+      "name": "estado_cajero",
+      "schema": "public",
+      "values": [
+        "operativo",
+        "mantenimiento",
+        "fuera_servicio"
+      ]
+    },
+    "public.estado_cliente": {
+      "name": "estado_cliente",
+      "schema": "public",
+      "values": [
+        "activo",
+        "inactivo",
+        "pendiente_verificacion"
+      ]
+    },
+    "public.estado_cuenta": {
+      "name": "estado_cuenta",
+      "schema": "public",
+      "values": [
+        "activa",
+        "inactiva",
+        "bloqueada",
+        "cerrada"
+      ]
+    },
+    "public.estado_prestamo": {
+      "name": "estado_prestamo",
+      "schema": "public",
+      "values": [
+        "solicitado",
+        "aprobado",
+        "rechazado",
+        "pagado",
+        "moroso"
+      ]
+    },
+    "public.estado_servicio": {
+      "name": "estado_servicio",
+      "schema": "public",
+      "values": [
+        "activo",
+        "inactivo"
+      ]
+    },
+    "public.estado_tarjeta": {
+      "name": "estado_tarjeta",
+      "schema": "public",
+      "values": [
+        "activa",
+        "bloqueada",
+        "vencida",
+        "reportada"
+      ]
+    },
+    "public.estado_transaccion": {
+      "name": "estado_transaccion",
+      "schema": "public",
+      "values": [
+        "completada",
+        "pendiente",
+        "rechazada",
+        "reversada"
+      ]
+    },
+    "public.estado_usuario": {
+      "name": "estado_usuario",
+      "schema": "public",
+      "values": [
+        "activo",
+        "inactivo",
+        "bloqueado"
+      ]
+    },
+    "public.log_nivel": {
+      "name": "log_nivel",
+      "schema": "public",
+      "values": [
+        "info",
+        "advertencia",
+        "error",
+        "critico"
+      ]
+    },
+    "public.moneda": {
+      "name": "moneda",
+      "schema": "public",
+      "values": [
+        "PYG",
+        "USD"
+      ]
+    },
+    "public.rol_nombre": {
+      "name": "rol_nombre",
+      "schema": "public",
+      "values": [
+        "administrador",
+        "cajero",
+        "ejecutivo_cuentas",
+        "auditor",
+        "cliente"
+      ]
+    },
+    "public.tipo_cuenta": {
+      "name": "tipo_cuenta",
+      "schema": "public",
+      "values": [
+        "caja_ahorro",
+        "cuenta_corriente",
+        "plazo_fijo"
+      ]
+    },
+    "public.tipo_identificacion": {
+      "name": "tipo_identificacion",
+      "schema": "public",
+      "values": [
+        "cedula",
+        "ruc",
+        "pasaporte"
+      ]
+    },
+    "public.tipo_servicio": {
+      "name": "tipo_servicio",
+      "schema": "public",
+      "values": [
+        "luz",
+        "agua",
+        "telefonia",
+        "impuestos"
+      ]
+    },
+    "public.tipo_tarjeta": {
+      "name": "tipo_tarjeta",
+      "schema": "public",
+      "values": [
+        "debito",
+        "credito"
+      ]
+    },
+    "public.tipo_transaccion": {
+      "name": "tipo_transaccion",
+      "schema": "public",
+      "values": [
+        "retiro",
+        "deposito",
+        "transferencia",
+        "pago_servicio",
+        "consulta"
+      ]
+    }
+  },
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

@@ -1,0 +1,1 @@
+ALTER TABLE "cuentas" ALTER COLUMN "numero_cuenta" SET DEFAULT nextval('numero_cuenta_seq')::text;
