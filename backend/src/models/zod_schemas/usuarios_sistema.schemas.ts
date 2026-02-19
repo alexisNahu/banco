@@ -16,8 +16,6 @@ export const ReadUsuarioSistemaSchema = z.object({
 
 /* ---------------- UPDATE ---------------- */
 export const UpdateUsuarioSistemaSchema = z.object({
-    params: z.object({ id: z.string() }),
-    query: z.object({}).optional(),
     body: z.object({
         clienteId: z.string().optional(),
         username: z.string().min(3).optional(),
@@ -28,6 +26,8 @@ export const UpdateUsuarioSistemaSchema = z.object({
         intentosFallidos: z.number().int().min(0).optional(),
         fechaUltimoCambioPassword: z.coerce.date().optional(),
     }),
+    query: z.object({}).optional(),
+    params: z.object({ id: z.string() }),
 });
 
 /* ---------------- DELETE ---------------- */

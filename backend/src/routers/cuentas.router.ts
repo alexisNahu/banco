@@ -7,6 +7,7 @@ import {
     UpdateCuentaSchema
 } from "../models/zod_schemas/cuentas.schemas.js";
 import {cuentasController} from "../controllers/cuentas.controllers.js";
+import {ReadAuditLogSchema} from "../models/zod_schemas/auditoria.schemas";
 
 const cuentasRouter: Router = Router()
 
@@ -16,5 +17,7 @@ cuentasRouter.route('/')
 cuentasRouter.route('/:id')
     .patch(validateSchema(UpdateCuentaSchema), cuentasController.update)
     .delete(validateSchema(DeleteCuentaSchema), cuentasController.delete)
+cuentasRouter.route('/history')
+    .get(validateSchema(ReadAuditLogSchema), cuentasController.accountHistory)
 
 export default cuentasRouter

@@ -4,11 +4,12 @@ import {
     Transacciones
 } from "../db/schema.js";
 import {db} from "../db/connection.js";
-import {and, eq, gte, lte} from "drizzle-orm";
+import {and, eq, gte, lte, or} from "drizzle-orm";
 import type {TransaccionQueryData} from "../models/zod_schemas/transacciones.schemas.js";
 
 export async function insertTransaccion (transaccion: InsertTransaccion): Promise<SelectTransaccion | undefined> {
     try {
+        console.log('desde el repo', transaccion)
         const [result] = await db.insert(Transacciones).values(transaccion).returning()
         return result
     } catch (e) {
@@ -39,6 +40,10 @@ export async function selectTransacciones (
         if (fields.servicioId) conditions.push(eq(Transacciones.servicioId, fields.servicioId));
         if (fields.moneda) conditions.push(eq(Transacciones.moneda, fields.moneda));
         if (fields.estado) conditions.push(eq(Transacciones.estado, fields.estado));
+        if (fields.cuentaId) conditions.push(or(
+            eq(Transacciones.cuentaOrigenId, fields.cuentaId),
+            eq(Transacciones.cuentaDestinoId, fields.cuentaId)
+        ))
 
         // filtros de rango de fechas (ejemplo)
         if (fields.fechaDesde && fields.fechaHasta) {

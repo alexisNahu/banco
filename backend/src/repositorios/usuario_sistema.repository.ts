@@ -29,6 +29,7 @@ export async function getApiUsuarioSistemaByUsername(username: string) {
 
 export async function updateUsuarioSistema(fields: Partial<SelectUsuarioSistema>, id: string): Promise<void> {
     try {
+        console.log({id, fields})
         const { id: _, ...updateFields } = fields;
         await db.update(Usuarios_Sistema).set(updateFields).where(eq(Usuarios_Sistema.id, id))
     } catch (e: any) {

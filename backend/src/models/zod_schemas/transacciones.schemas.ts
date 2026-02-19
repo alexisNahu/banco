@@ -39,6 +39,7 @@ export const ReadTransaccionSchema = z.object({
         estado: z.enum(estadoTransaccionEnum.enumValues).optional(),
         fechaDesde: z.coerce.date().optional(), // filtros por rango
         fechaHasta: z.coerce.date().optional(),
+        cuentaId: z.string().optional()
     }),
 });
 

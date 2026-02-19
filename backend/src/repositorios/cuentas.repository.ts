@@ -38,6 +38,8 @@ export async function selectCuentaByNumeroCuenta(numCuenta: string): Promise<Sel
 
 export async function selectCuentas(fields: CuentaQueryData): Promise<SelectCuenta[]> {
     try {
+        console.log(fields)
+        console.log(fields.clienteId)
         const conditions = [];
 
         if (fields.id) conditions.push(eq(Cuentas.id, fields.id));
@@ -46,6 +48,8 @@ export async function selectCuentas(fields: CuentaQueryData): Promise<SelectCuen
         if (fields.tipoCuenta) conditions.push(eq(Cuentas.tipoCuenta, fields.tipoCuenta));
         if (fields.moneda) conditions.push(eq(Cuentas.moneda, fields.moneda));
         if (fields.estado) conditions.push(eq(Cuentas.estado, fields.estado));
+
+        console.log(conditions)
 
         if (conditions.length > 0) {
             return await db.select().from(Cuentas).where(and(...conditions));

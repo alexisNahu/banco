@@ -2,6 +2,7 @@ import * as cuentasService from '../services/cuentas.service.js'
 import type {Request, Response} from 'express'
 import type {SelectCuenta} from "../db/schema.js";
 import {ApiError, BadRequestError} from "../apiErrores.js";
+import {getLogs} from "../services/audith_log.service";
 
 export const cuentasController = {
     create: async (req: Request, res: Response) => {
@@ -37,6 +38,15 @@ export const cuentasController = {
             const deletedCuenta = await cuentasService.deleteCuenta(id)
             return res.status(200).json({msg: 'cuenta eliminada con exito', registro_eliminado: deletedCuenta})
         }catch (e: any) {
+            res.status(e instanceof ApiError ? e.statusCode : 500).json({details: e.message})
+        }
+    },
+    accountHistory: async(req: Request, res: Response) => {
+        try {
+            console.log(req.query)
+            const logs = await getLogs(req.query)
+            console.log(logs)
+        } catch(e: any) {
             res.status(e instanceof ApiError ? e.statusCode : 500).json({details: e.message})
         }
     }

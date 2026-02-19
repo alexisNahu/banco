@@ -7,7 +7,9 @@ import {convertirMoneda} from "../utils/conversionMoneda.utility.js";
 
 export async function getCuentas(fields: CuentaQueryData): Promise<SelectCuenta[]> {
     try {
-        return await cuentaRepository.selectCuentas(fields)
+        const res = await cuentaRepository.selectCuentas(fields)
+        console.log(res)
+        return res
     } catch (e) {
         handleError(e as ApiError); throw e
     }
@@ -104,7 +106,6 @@ export async function getCuentaByNumeroCuenta(num: string): Promise<SelectCuenta
 export async function getCuentasByClienteId(id: string): Promise<SelectCuenta[]> {
     try {
         const cuentas: SelectCuenta[] | undefined = await cuentaRepository.selectCuentasByClienteId(id)
-
         if (!cuentas) throw new NotFoundError(`No se encontraron cuentas para el cliente con id ${id}`)
         return cuentas
     } catch (e) {

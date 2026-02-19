@@ -2,14 +2,19 @@ import type {Request, Response} from 'express'
 import * as transaccionService from '../services/transacciones.service.js'
 import {ApiError} from "../apiErrores.js";
 import type {SelectCuenta, SelectTransaccion} from "../db/schema.js";
+import {UsuarioSistemaPayload} from "../models/clientes.model";
+import jwt from "jsonwebtoken";
+import {config} from "../../config";
 
 export const transaccionControllers = {
     create: async (req: Request, res: Response) => {
         try {
-            const { transaccion, estado, razon } = await transaccionService.procesarTransaccion(req.body);
+            const activeUser = jwt.verify(req.cookies.access_token, config.jwt.secret) as UsuarioSistemaPayload
+
+            const { transaccion, estado, razon } = await transaccionService.procesarTransaccion(req.body, activeUser);
 
             res.status(200).json({
-                mensaje: `Transacción ${estado} exitosamente`,
+                msg: `Transacción ${estado} exitosamente`,
                 data: transaccion,
                 estado: estado,
                 razon: razon,
@@ -29,5 +34,5 @@ export const transaccionControllers = {
         } catch (e: any) {
             res.status(e instanceof ApiError ? e.statusCode : 500).json({details: e.message})
         }
-    },
+    }
 }

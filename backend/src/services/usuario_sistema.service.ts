@@ -41,6 +41,7 @@ export async function getUsuariosSistema(fields: Partial<SelectUsuarioSistema>):
 
 export async function updateUsuarioSistema(id: string, cliente: Partial<SelectUsuarioSistema>): Promise<{prevUsuario: SelectUsuarioSistema | undefined, updatedUsuario: SelectUsuarioSistema | undefined}> {
     try {
+        console.log('en elservice', {id, cliente})
         const prevUsuario= await usuarioService.getApiUsuarioSistemaById(id)
         await usuarioRepository.updateUsuarioSistema(cliente, id)
         const updatedUsuario = await usuarioService.getApiUsuarioSistemaById(id)

@@ -10,7 +10,7 @@ import {getClienteByNumeroIdentificacion} from "./clientes.service.js";
 import * as rpService from './rol_permisos.service.js'
 import type {RolNombreEnum} from "../models/models.js";
 
-export async function login({username, password}: LoginSchemaType): Promise<{ access_token: string, refresh_token: string }> {
+export async function login({username, password}: LoginSchemaType): Promise<{ access_token: string, refresh_token: string, foundUsuario: SelectUsuarioSistema }> {
     try {
         const foundUsuario: SelectUsuarioSistema | undefined = await usuarioService.getUsuarioSistemaByUsername(username)
         if (!foundUsuario) throw new ForbiddenError('Error en el usuario o la contraseña')
@@ -21,7 +21,7 @@ export async function login({username, password}: LoginSchemaType): Promise<{ ac
         const access_token: string = generateToken(foundUsuario, 2, config.jwt.secret)
         const refresh_token: string = generateToken(foundUsuario, 10, config.jwt.refreshSecret)
 
-        return {access_token, refresh_token}
+        return {access_token, refresh_token, foundUsuario}
     } catch (e: any) {
         handleError(e as ApiError); throw e
     }

@@ -22,22 +22,35 @@ interface AuthResponse extends Response {
 
 export const validateSchema = <T extends RequestSchema>(schema: T) =>
     (req: Request, res: Response, next: NextFunction) => {
-        const dataToValidate = {
+        const validation = schema.safeParse({
             body: req.body,
             params: req.params,
             query: req.query,
-        };
-        const validation = schema.safeParse(dataToValidate);
+        });
 
         if (!validation.success) {
             return res.status(400).json({
-                msg: "Error de validación, por favor verificar la petición",
+                msg: "Error de validación en la petición",
                 details: validation.error.issues,
             });
         }
 
-        // Asignamos los valores parseados para que req tenga los tipos correctos
-        if (validation.data.body) req.body = validation.data.body;
+        // ✅ 1. Sincronizar el BODY (JSON enviado)
+        // Zod ya aplicó transformaciones como z.coerce.date()
+        if (validation.data.body) {
+            req.body = validation.data.body;
+        }
+
+        // ✅ 2. Sincronizar PARAMS (El ID de la URL)
+        // Usamos Object.assign para evitar el error de "only a getter"
+        if (validation.data.params) {
+            Object.assign(req.params, validation.data.params);
+        }
+
+        // ✅ 3. Sincronizar QUERY (Opcional)
+        if (validation.data.query) {
+            Object.assign(req.query, validation.data.query);
+        }
 
         next();
     };

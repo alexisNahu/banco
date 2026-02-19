@@ -1,4 +1,4 @@
-import type {InsertTransaccion, SelectCuenta, SelectServicio, SelectTransaccion} from "../db/schema.js";
+import type {InsertTransaccion, SelectCajero, SelectCuenta, SelectServicio, SelectTransaccion} from "../db/schema.js";
 import * as transaccionRepository from '../repositorios/transacciones.repository.js'
 import {
     ApiError, BadRequestError,
@@ -9,21 +9,44 @@ import {
 import type {TransaccionQueryData} from "../models/zod_schemas/transacciones.schemas.js";
 import * as cuentasService from './cuentas.service.js'
 import {type EstadoTransaccion, LIMITES_PENDIENTE} from "../models/models.js";
+import {getCajeroByCodigoCajero} from "./cajeros.service";
+import {createAuditLog} from "./audith_log.service";
+import jwt from "jsonwebtoken";
+import {config} from "../../config";
+import type {UsuarioSistemaPayload} from "../models/clientes.model";
 
 
-export async function procesarTransaccion(transaccion: InsertTransaccion) {
+export async function procesarTransaccion(transaccion: InsertTransaccion, activeUser: UsuarioSistemaPayload) {
     try {
+        console.log(transaccion)
+
         const {emisor, destinatario} = await verificarCuentasDeTransaccion(transaccion)
 
         const {estado, razon} = determinarEstadoTransaccion(transaccion, emisor, destinatario)
 
+        console.log(razon)
+
+        const cajero: SelectCajero | null = transaccion.cajeroId ? await getCajeroByCodigoCajero(transaccion.cajeroId) : null
+
         const newTransaccion: SelectTransaccion | undefined = await createTransaccion({...transaccion,
-            estado: estado,
-        })
+            servicioId: null,
+            cuentaOrigenId: emisor?.id,
+            cuentaDestinoId: destinatario.id,
+            cajeroId: cajero?.id,
+            estado: estado})
+
 
         await updateCuentasDeTransaccion(emisor || undefined, destinatario || undefined, newTransaccion)
 
         if (!newTransaccion) throw new InternalServerError('Error creando la transaccion')
+
+        console.log(activeUser)
+        await createAuditLog({
+            usuarioId: activeUser.id,
+            accionRealizada: "INSERT",
+            tablaAfectada: "transacciones",
+            registroAfectadoId: `${newTransaccion.id}`
+        })
 
         return {transaccion: newTransaccion, estado: newTransaccion.estado, razon}
 
@@ -64,6 +87,7 @@ async function updateCuentasDeTransaccion(
 
 async function createTransaccion (transaccion: InsertTransaccion): Promise<SelectTransaccion> {
     try {
+
         const newTransaccion: SelectTransaccion | undefined = await transaccionRepository.insertTransaccion(transaccion)
         if (!newTransaccion) throw new InternalServerError('Error creando la transaccion')
 
@@ -94,12 +118,16 @@ export async function getTransaccion(transaccion: TransaccionQueryData) {
 async function verificarCuentasDeTransaccion(transaccion: InsertTransaccion) {
     try {
         let destinatario = transaccion.cuentaDestinoId
-            ? await cuentasService.getCuentaById(transaccion.cuentaDestinoId)
+            ? await cuentasService.getCuentaByNumeroCuenta(transaccion.cuentaDestinoId)
             : null;
 
         let emisor = transaccion.cuentaOrigenId
-            ? await cuentasService.getCuentaById(transaccion.cuentaOrigenId)
+            ? await cuentasService.getCuentaByNumeroCuenta(transaccion.cuentaOrigenId)
             : null;
+
+        if (destinatario?.numeroCuenta === emisor?.numeroCuenta) {
+            throw new BadRequestError('No se puede hacer una transferencia a la misma cuenta')
+        }
 
         // Validación general mínima
         if (!transaccion.cuentaDestinoId && !transaccion.cuentaOrigenId) {

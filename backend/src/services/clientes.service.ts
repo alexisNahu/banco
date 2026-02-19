@@ -12,9 +12,7 @@ export async function getCliente(fields: Partial<SelectCliente>): Promise<Select
 
 export async function createCliente(cliente: InsertCliente): Promise<SelectCliente> {
     try {
-        console.log(cliente)
         const newCliente: SelectCliente | undefined = await clienteRepository.insertCliente(cliente)
-        console.log(newCliente)
         if (!newCliente) throw new InternalServerError('No se pudo insertar el cliente')
         return newCliente
     } catch (e) {
@@ -35,6 +33,7 @@ export async function deleteCliente(id: string): Promise<SelectCliente> {
 
 export async function updateCliente(id: string, cliente: Partial<SelectCliente>): Promise<{prevCliente: SelectCliente | undefined, updatedCliente: SelectCliente | undefined}> {
     try {
+        console.log({cliente, id})
         const prevCliente = await clienteRepository.selectClienteById(id)
         await clienteRepository.updateCliente(cliente, id)
         const updatedCliente = await clienteRepository.selectClienteById(id)
@@ -55,3 +54,5 @@ export async function getClienteByNumeroIdentificacion(num: string) {
         handleError(e as ApiError); throw e
     }
 }
+
+
